@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Typir - What Logo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Fira+Mono&family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-gradient-day: linear-gradient(90deg, navy 0%, #2b69ff 100%);
+      --primary-gradient-night: linear-gradient(90deg, #60a7ff 0%, #165a97 100%);
+      --background-day: #f8fafc;
+      --background-night: #1e2230;
+      --textbox-bg-day: #fff;
+      --textbox-bg-night: #252a40;
+      --textbox-color-day: #252a40;
+      --textbox-color-night: #f5f7fa;
+      --border-radius: 2rem;
+      --main-font: 'Inter', sans-serif;
+      --textbox-font: 'Inter', sans-serif;
+      --accent-day: #2b69ff;
+      --accent-night: #4f73c8;
+      --header-size: 2rem;
+      --shimmer-duration: 7s;
+      --ui-size: 1rem;
+      --textbox-size: 2.1rem;
+      --focus-glow: #2b69ff22;
+      --focus-glow-night: #4562ff55;
+      --modal-shadow: 0 10px 44px 0 #0e204230;
+      --section-bg: #f4f8fe;
+      --section-border: #d7def7;
+      --slider-fill: #2b69ff;
+      --slider-bg: #dbe4f6;
+
+      /* Moving backgrounds speeds */
+      --bg-move1-speed: 60s;
+      --bg-move2-speed: 100s;
+      --bg-move3-speed: 150s;
+    }
+    .g-blue-navy { --header-gradient: linear-gradient(90deg, navy 0%, #51beff 100%);}
+    .g-mint-blue { --header-gradient: linear-gradient(90deg, #58e3f3 0%, #1a237e 100%);}
+    .g-violet-blue { --header-gradient: linear-gradient(90deg, #6d32ff 0%, #23c6e3 100%);}
+    .g-cyan-fade { --header-gradient: linear-gradient(90deg, #43e7ff, #2947b7, #6fd9e5);}
+    .g-night-gradient { --header-gradient: linear-gradient(90deg, #60a7ff 0%, #165a97 100%);}
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    @keyframes fadeIn {
+      from {opacity:0; transform: translateY(30px);}
+      to {opacity:1; transform: translateY(0);}
+    }
+    @keyframes clearOut {
+      from { transform: scale(1) rotate(0deg); opacity: 1; filter: blur(0px);}
+      70% { transform: scale(1.12) rotate(-1deg); opacity:1;}
+      90% { filter: blur(2px);}
+      to { transform: scale(0.87) rotate(3deg) translateY(12px); opacity: 0.1; filter: blur(5px);}
+    }
+    @keyframes clearIn {
+      from { transform: scale(0.96) translateY(12px) rotate(-6deg); opacity: 0.2; filter: blur(7px);}
+      to   { transform: scale(1) translateY(0) rotate(0deg); opacity: 1; filter: blur(0px);}
+    }
+    /* Moving Background Types */
+    @keyframes waveMove {
+      0% {background-position-x: 0;}
+      100% {background-position-x: 1000px;}
+    }
+    @keyframes floatBubbles {
+      0% {transform: translateY(0) translateX(0);}
+      50% {transform: translateY(-20px) translateX(10px);}
+      100% {transform: translateY(0) translateX(0);}
+    }
+    @keyframes stripesMove {
+      0% {background-position: 0 0, 0 0;}
+      100% {background-position: 50px 50px, -50px -50px;}
+    }
+    /* Emoji Box */
+    #emojiPicker {
+      position: absolute;
+      background: white;
+      border: 1px solid #b7cbf7;
+      border-radius: 1em;
+      max-width: 280px;
+      max-height: 180px;
+      overflow-y: auto;
+      padding: 5px;
+      display: none;
+      z-index: 20000;
+    }
+    #emojiPicker button {
+      font-size: 1.3rem;
+      border: none;
+      background: transparent;
+      padding: 5px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.2s;
+      border-radius: 0.3em;
+    }
+    #emojiPicker button:hover {
+      background-color: #2b69ff22;
+    }
+
+    body {
+      margin:0; padding:0; min-height:100vh;
+      background: var(--background-day);
+      font-family:var(--main-font);
+      color:#131422;
+      transition: background 0.6s,color 0.6s;
+      font-size: var(--ui-size);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: center;
+    }
+    body.bg-move1 {
+      background-image: repeating-linear-gradient(
+        45deg,
+        #a0c4ff 0,
+        #a0c4ff 10px,
+        #7ec3ff 10px,
+        #7ec3ff 20px
+      );
+      background-size: 1000px 1000px;
+      animation: waveMove var(--bg-move1-speed) linear infinite;
+    }
+    body.bg-move2 {
+      background-image:
+        radial-gradient(circle at 25% 25%, rgba(43,105,255,0.15) 15%, transparent 40%),
+        radial-gradient(circle at 75% 75%, rgba(20,85,255,0.10) 15%, transparent 50%);
+      background-repeat: repeat;
+      background-size: 250px 250px;
+      animation: floatBubbles 20s ease-in-out infinite;
+    }
+    body.bg-move3 {
+      background-image:
+        linear-gradient(45deg, #5599ff 25%, transparent 25%),
+        linear-gradient(-45deg, #5599ff 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #5599ff 75%),
+        linear-gradient(-45deg, transparent 75%, #5599ff 75%);
+      background-size: 50px 50px;
+      background-position: 0 0, 0 25px, 25px -25px, -25px 0px;
+      animation: stripesMove 30s linear infinite;
+    }
+    body.night {
+      background: var(--background-night);
+      color: #e6e5f7;
+    }
+    .gradient-text, .header-gradient {
+      background: var(--header-gradient, var(--primary-gradient-day));
+      background-clip:text; -webkit-background-clip:text;
+      color:transparent; -webkit-text-fill-color:transparent;
+      background-size:400% 100%;
+      animation: shimmer var(--shimmer-duration) linear infinite;
+      font-weight: 800;
+      user-select: none;
+      transition: background 0.55s;
+    }
+    #app-header {
+      width:100vw; text-align:center;
+      padding:2rem 0 2rem 0;
+      font-size: var(--header-size);
+      letter-spacing:0.05em;
+      font-weight:800;
+      position:relative;
+      z-index:5;
+      user-select:none;
+      transition: color 0.6s;
+      flex-shrink: 0;
+    }
+    .logo-corner {
+      position:absolute;
+      left:2vw; top:1.1em;
+      font-size:1.25rem;
+      font-weight:800;
+      z-index:10;
+      background: var(--header-gradient, var(--primary-gradient-day));
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip: text;
+      color: transparent;
+      background-size: 400% 100%;
+      animation: shimmer 8s linear infinite;
+      letter-spacing:2px;
+      transition: background 0.55s;
+    }
+    .settings-btn {
+      position:absolute;right:2vw;top:1.2em;
+      background: var(--primary-gradient-day); color:#fff;
+      border: none;
+      font-weight:700;
+      padding: 0.55em 1.3em;
+      border-radius:1.3em;
+      box-shadow: 0 4px 14px 0 rgba(39,63,112,0.10);
+      cursor:pointer;
+      font-size:1rem;
+      z-index:12;
+      opacity:0.98;
+      transition:background 0.25s, box-shadow 0.28s, color 0.3s;
+      outline-offset:2px;
+      user-select:none;
+    }
+    .settings-btn:hover { box-shadow:0 1px 18px #19378055; }
+    body.night .settings-btn {
+      background: #22284b; color: #c9e1ff; border:1px solid #344282;
+    }
+    .center-area {
+      min-height: 55vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 6vw;
+      flex-grow: 1;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .curved-textbox-container {
+      width:95vw;max-width:590px;
+      background: var(--textbox-bg-day);
+      border-radius:var(--border-radius);
+      box-shadow:0 7px 44px 0 rgba(39,80,140,0.10);
+      padding:2.5rem 2.3rem 2.2rem 2.3rem;
+      display:flex; flex-direction:column; align-items:center;
+      margin:1.2rem auto 0.9rem auto;
+      position:relative;
+      transition: background 0.45s, box-shadow 0.3s;
+      animation: fadeIn 0.8s cubic-bezier(.6,-0.28,.41,1.36);
+      box-sizing: border-box;
+    }
+    body.night .curved-textbox-container {
+      background: var(--textbox-bg-night);
+      box-shadow:0 7px 44px 0 rgba(17,20,38,0.28);
+    }
+    .curved-textbox {
+      width: 100%;
+      max-width: 100%;
+      resize:none;
+      min-height:3.3em; max-height:8.7em;
+      font-size: var(--textbox-size);
+      border:none;
+      background:transparent;
+      color: var(--textbox-color-day);
+      outline:none;
+      font-family: var(--textbox-font), monospace;
+      letter-spacing: 0.03em;
+      font-weight:600;
+      text-align:center;
+      border-radius: calc(var(--border-radius) - 0.5em);
+      padding:0.7em 0.6em;
+      box-shadow:inset 0 0 0 0 rgba(0,0,0,0);
+      caret-color: var(--accent-day);
+      transition:box-shadow 0.25s, color 0.25s, background 0.25s, font-family 0.4s, font-size 0.4s;
+      outline-offset:1px;
+      user-select: text;
+    }
+    .curved-textbox:focus {
+      box-shadow: 0 0 0 3px var(--focus-glow), 0 0 22px #4957ff21;
+      background: #e5f0ff11;
+      transition: box-shadow 0.31s, background 0.22s;
+    }
+    body.night .curved-textbox {
+      color: var(--textbox-color-night);
+      caret-color: var(--accent-night);
+    }
+    body.night .curved-textbox:focus {
+      box-shadow: 0 0 0 3px var(--focus-glow-night), 0 0 17px #1e223086;
+      background: #32435914;
+    }
+    .text-info {
+      margin-top:0.45rem;
+      font-size:0.99rem;
+      text-align:center;
+      color:#6681b2;
+      user-select:none; letter-spacing: 0.02em;
+      transition: color 0.33s;
+      font-family:var(--main-font);
+      opacity:1; transition:opacity 0.33s;
+      pointer-events:none;
+      min-height:1.3em;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    body.night .text-info { color:#98a5d2;}
+    .btn {
+      background: var(--accent-day); color:#fff;
+      border:none;
+      padding:0.63em 1.38em;
+      border-radius:1.5em;
+      font-weight:700;
+      font-size:1.02rem;
+      box-shadow: 0 3px 18px 0 rgba(81,87,194,.10);
+      cursor:pointer;
+      transition: background 0.18s, transform 0.14s, box-shadow 0.23s;
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+      position:relative;
+      user-select: none;
+    }
+    .btn svg { width:18px; height:18px; fill:none; stroke:white; stroke-width:2.25; }
+    .btn:hover { background:#2155e2; transform:scale(1.045);}
+    body.night .btn { background:var(--accent-night); color:#eef2ff; }
+    body.night .btn:hover { background:#1a274a;}
+    .toolbar {
+      margin-top:1.45rem;display:flex;
+      justify-content:center;gap:1em;flex-wrap:wrap;
+      animation: fadeIn 0.52s cubic-bezier(.6,-0.28,.41,1.36);
+      width: 100%;
+      max-width: 590px;
+      box-sizing: border-box;
+    }
+    .curved-textbox.clear-anim {
+      animation: clearOut 0.37s cubic-bezier(.56,-0.13,.34,1.4) 1;
+    }
+    .curved-textbox.clear-anim-in {
+      animation: clearIn 0.37s cubic-bezier(.56,-0.13,.34,1.4) 1;
+    }
+    .modal-bg {
+      display:none; position:fixed; left:0;top:0;right:0;bottom:0;
+      z-index:10000; background:rgba(60,81,146,0.15);
+      animation: fadeIn 0.22s forwards; backdrop-filter: blur(5px);
+    }
+    .modal-bg.open { display:block; }
+    .settings-modal {
+      position:absolute; left:50%;top:11vh;
+      transform:translateX(-50%);
+      background:#fff;
+      border-radius:1.36em;
+      padding: 0 0 2.1rem 0;
+      min-width:340px; max-width:93vw; color:#1e2230;
+      box-shadow: var(--modal-shadow);
+      animation: fadeIn 0.22s forwards;
+      font-family:var(--main-font);
+      transition: background 0.3s, color 0.3s;
+      max-height: 80vh;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      border: 2.5px solid #e0eaff;
+    }
+    body.night .settings-modal {
+      background:#222540;
+      color:#dee2ff;
+      border-color: #312f44;
+      box-shadow:0 4px 60px 0 #16214373;
+    }
+    .settings-modal-header {
+      display: flex;
+      align-items: center;
+      border-top-left-radius: 1.25em;
+      border-top-right-radius: 1.25em;
+      padding: 1.1rem 2.2rem 1.1rem 2.3rem;
+      background: linear-gradient(90deg, #eaf3ff 45%, #c9dffe 100%);
+      border-bottom: 2px solid #dbebfa;
+      position: sticky; top:0; z-index:9;
+    }
+    body.night .settings-modal-header {
+      background: linear-gradient(90deg,#252f53 65%, #1d2440 100%);
+      border-bottom: 2px solid #353966;
+    }
+    .settings-modal .close-btn {
+      margin-left: auto;
+      background:none; border:none; font-size:2.1em;
+      color:#6076b8; cursor:pointer; user-select:none;
+      font-weight:700; transition: color 0.25s;
+      outline:none; padding:0 0.3em 0 0.6em;
+      align-self: flex-start;
+      position: relative;
+      top: -2px;
+    }
+    .settings-modal .close-btn:hover { color:#272f77;}
+    body.night .settings-modal .close-btn { color:#aeb8e7;}
+    .settings-modal h2 {
+      font-size:1.22em;
+      font-weight: 800;
+      margin:0 0 0 0.25em;
+      color:#1a295b;
+      letter-spacing: 1.5px;
+    }
+    body.night .settings-modal h2 { color:#e1e8ff; }
+    .settings-modal .section {
+      border-radius: 1em;
+      background: var(--section-bg);
+      box-shadow: 0 2px 9px 0 #32558505;
+      border: 1.5px solid var(--section-border);
+      margin: 1.25em 1.1em 1.2em 1.1em;
+      padding: 1.12em 1.12em 0.4em 1.12em;
+      transition: background 0.18s;
+      position: relative;
+    }
+    body.night .settings-modal .section {
+      background: #292c49;
+      border: 1.5px solid #222a39;
+    }
+    .settings-modal .section label {
+      font-weight: 600;
+      font-size: 1.06em;
+      color: #173355;
+      margin-top: 0.15em;
+      margin-bottom: 0.1em;
+      display: block;
+      letter-spacing: .03em;
+    }
+    body.night .settings-modal .section label {
+      color: #cadbff;
+    }
+    .settings-modal .section small {
+      display: block;
+      font-size: 0.99em;
+      color: #6780a0;
+      margin-bottom: 0.25em;
+      font-weight: 400;
+      margin-top: 0.08em;
+      line-height: 1.3em;
+      user-select: none;
+    }
+    body.night .settings-modal .section small {
+      color: #a4bdef;
+    }
+    .settings-modal input[type="color"], .settings-modal select, .settings-modal input[type="checkbox"] {
+      margin-bottom: 0.5rem;
+      min-height: 2.1em;
+      border-radius:0.8em;
+      border: 1.2px solid #b7cbf7;
+      font-size: 1.04em;
+      font-family: var(--main-font);
+      margin-right: 1em;
+      outline: none;
+      transition: border-color 0.20s;
+      cursor: pointer;
+      padding: 0.34em 1em;
+    }
+    .settings-modal select:focus, .settings-modal input[type="color"]:focus {
+      border-color: var(--accent-day);
+    }
+    .settings-modal input[type="range"] {
+      width: 60%;
+      margin: 0.25em 1em 0.8em 0;
+      height: 2.2em;
+      background: transparent;
+      vertical-align: middle;
+      accent-color: var(--slider-fill);
+      border-radius: 10px;
+      --range: calc((var(--val,1)-var(--min,1))/ (var(--max,3)-var(--min,1)));
+      background: linear-gradient(90deg, var(--slider-fill) 0%, var(--slider-fill) calc(var(--range,0)*100%), var(--slider-bg) calc(var(--range,0)*100%), var(--slider-bg) 100%);
+      transition: background 0.3s;
+    }
+    .settings-modal input[type="range"]:focus {
+      outline: 2px solid var(--accent-day);
+      outline-offset: 2px;
+    }
+    .settings-modal input[type="checkbox"] {
+      accent-color: var(--slider-fill);
+      width: 1.3em; height: 1.3em;
+      padding: 0; margin: 0 0.3em 0 0 !important;
+      vertical-align: middle;
+      cursor: pointer;
+    }
+    .settings-modal .reset-btn {
+      background: #ededfd;
+      color:#223070;
+      border-radius:1.3em;
+      margin-top:1.25em;
+      border:none;
+      font-weight:700;
+      padding:0.62em 1.7em;
+      box-shadow:0 1px 3px #1940c014;
+      cursor:pointer;
+      font-size:1.03em;
+      transition:background 0.19s, color 0.19s;
+      margin-left: 1.1em;
+      margin-right: 1.1em;
+      width: calc(100% - 2.2em);
+      display: block;
+      user-select: none;
+    }
+    .settings-modal .reset-btn:hover {
+      background: #d2d3f7; color: #0b254e;
+    }
+    body.night .settings-modal .reset-btn {
+      background: #2a2f4a; color: #a7afd7;
+    }
+    body.night .settings-modal .reset-btn:hover {
+      background: #1d203a; color: #bfd3f2;
+    }
+    @media (max-width:700px){#app-header{padding-top:1rem}}
+    @media (max-width:600px){
+      .curved-textbox-container { max-width:99vw; padding:1em;}
+      .settings-modal { min-width:97vw; padding:0;}
+      #app-header{ padding:1.0rem 0 1.7rem 0; }
+      .modal-bg { animation: none !important; }
+      :root { --header-size: 1.32rem; }
+      .settings-modal-header { padding: 0.8rem 1em 0.9rem 1em;}
+      .settings-modal .section { margin: 1.08em 0.5em 1em 0.5em; padding: 0.9em 0.7em 0.3em 0.9em;}
+      .settings-modal .reset-btn { margin-left:0.4em; margin-right:0.4em; width:calc(100% - 0.8em);}
+    }
+  </style>
+</head>
+<body>
+  <div id="app-header">
+    <span class="logo-corner gradient-text header-gradient" id="cornerLogo">What Logo</span>
+    <span class="gradient-text header-gradient" id="mainHeader" style="font-size:2rem; font-weight:800;">Typir</span>
+    <button class="settings-btn" id="openSettings" aria-label="Open Settings">⚙️ Settings</button>
+  </div>
+  <div class="center-area">
+    <div class="curved-textbox-container">
+      <textarea class="curved-textbox" id="mainTextbox" autofocus spellcheck="false" placeholder="Start typing..." aria-label="Typing textbox for input"></textarea>
+      <div class="text-info" id="countInfo">Characters: 0 | Words: 0</div>
+      <div class="toolbar" role="toolbar" aria-label="Text quick actions">
+        <button class="btn" id="copyBtn" aria-label="Copy text to clipboard" title="Copy to Clipboard">
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy
+        </button>
+        <button class="btn" id="undoBtn" aria-label="Undo last change" title="Undo">
+          <svg viewBox="0 0 24 24"><path d="M7 7v6h6"/><path d="M3 13a9 9 0 1 0 9-9"/></svg> Undo
+        </button>
+        <button class="btn" id="redoBtn" aria-label="Redo last undone change" title="Redo">
+          <svg viewBox="0 0 24 24"><path d="M17 17v-6h-6"/><path d="M21 11a9 9 0 1 1-9 9"/></svg> Redo
+        </button>
+        <button class="btn" id="clearBtn" aria-label="Clear textbox" title="Clear Textbox">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Clear
+        </button>
+        <button class="btn" id="toggleCountBtn" aria-pressed="true" aria-label="Toggle live word and character count" title="Toggle Word and Character Count">
+          👁️ Count
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal-bg" id="settingsModal" role="dialog" aria-modal="true">
+    <form class="settings-modal" id="settingsForm" autocomplete="off" onsubmit="return false;">
+      <div class="settings-modal-header">
+        <h2>Settings</h2>
+        <button class="close-btn" id="closeSettings" aria-label="Close settings">&times;</button>
+      </div>
+      <div class="section" id="sec-bgColor">
+        <label for="bgColor">Day Mode Background</label>
+        <small>Customize the background color for Day mode.</small>
+        <input type="color" id="bgColor" name="bgColor">
+      </div>
+      <div class="section" id="sec-bgMove">
+        <label for="bgMoveType">Moving Background</label>
+        <small>Choose a moving background or none</small>
+        <select id="bgMoveType">
+          <option value="none">None</option>
+          <option value="bg-move1">Wave Pattern</option>
+          <option value="bg-move2">Floating Circles</option>
+          <option value="bg-move3">Diagonal Stripes</option>
+        </select>
+      </div>
+      <div class="section" id="sec-uiFont">
+        <label for="uiFont">UI Font</label>
+        <small>Font family for buttons, settings, header, etc.</small>
+        <select id="uiFont" name="uiFont">
+          <option value="'Inter',sans-serif">Inter (default)</option>
+          <option value="'Roboto',sans-serif">Roboto</option>
+          <option value="'Fira Mono',monospace">Fira Mono</option>
+          <option value="monospace">Monospace</option>
+          <option value="serif">Serif</option>
+        </select>
+      </div>
+      <div class="section" id="sec-textboxFont">
+        <label for="textboxFont">Textbox Font</label>
+        <small>Font for text entered in Typir (main box).</small>
+        <select id="textboxFont" name="textboxFont">
+          <option value="'Inter',sans-serif">Inter (default)</option>
+          <option value="'Roboto',sans-serif">Roboto</option>
+          <option value="'Fira Mono',monospace">Fira Mono</option>
+          <option value="monospace">Monospace</option>
+          <option value="serif">Serif</option>
+        </select>
+      </div>
+      <div class="section" id="sec-textboxColor">
+        <label for="textboxColor">Textbox Color <small style="opacity:0.7;">(Day mode)</small></label>
+        <small>Change the background color of the typing area in Day mode.</small>
+        <input type="color" id="textboxColor" name="textboxColor">
+      </div>
+      <div class="section" id="sec-headerGradientDay">
+        <label for="headerGradientDay">Day Mode Header Gradient</label>
+        <small>Choose header gradient for Day theme.</small>
+        <select id="headerGradientDay">
+          <option value="g-blue-navy">Blue-Navy</option>
+          <option value="g-mint-blue">Mint-Blue</option>
+          <option value="g-violet-blue">Violet-Blue</option>
+          <option value="g-cyan-fade">Cyan Fade</option>
+        </select>
+      </div>
+      <div class="section" id="sec-headerGradientNight">
+        <label for="headerGradientNight">Night Mode Header Gradient</label>
+        <small>Choose header gradient for Night theme.</small>
+        <select id="headerGradientNight">
+          <option value="g-night-gradient">Blue Night</option>
+          <option value="g-violet-blue">Violet-Blue</option>
+          <option value="g-mint-blue">Mint-Blue</option>
+          <option value="g-cyan-fade">Cyan Fade</option>
+        </select>
+      </div>
+      <div class="section" id="sec-uiSize">
+        <label for="uiSize">UI Font Size</label>
+        <small>Size of settings, headers, and UI controls</small>
+        <input type="range" id="uiSize" min="0.8" max="1.6" step="0.01" value="1" />
+        <span id="uiSizeValue">1.00</span> em
+      </div>
+      <div class="section" id="sec-textboxSize">
+        <label for="textboxSize">Textbox Size</label>
+        <small>Size of the text typed in the main box</small>
+        <input type="range" id="textboxSize" min="1.0" max="3.0" step="0.01" value="2.1"/>
+        <span id="textboxSizeValue">2.10</span> em
+      </div>
+      <div class="section" id="sec-autoFocus">
+        <label><input type="checkbox" id="autoFocus" /> Focus textbox after clear</label>
+        <label><input type="checkbox" id="clearAnimToggle" checked/> Animate clear</label>
+      </div>
+      <button type="button" class="reset-btn" id="resetSettings">Reset to Default</button>
+    </form>
+  </div>
+  <script>
+    function persist(key, val) { localStorage.setItem(key, val);}
+    function getPersist(key, dflt) {return localStorage.getItem(key)||dflt;}
+
+    const body = document.body, html = document.documentElement;
+    let isNight = false;
+    let customBgDay = getPersist('bgDay', getComputedStyle(html).getPropertyValue('--background-day'));
+    let customTextboxColor = getPersist('tbColor', getComputedStyle(html).getPropertyValue('--textbox-bg-day'));
+    let uiFont = getPersist('uiFont', getComputedStyle(html).getPropertyValue('--main-font'));
+    let tbFont = getPersist('tbFont', getComputedStyle(html).getPropertyValue('--textbox-font'));
+    let headerGradDay = getPersist('headerGradDay','g-blue-navy');
+    let headerGradNight = getPersist('headerGradNight', 'g-night-gradient');
+    let uiSize = parseFloat(getPersist('uiSize', '1'));
+    let textboxSize = parseFloat(getPersist('textboxSize','2.1'));
+    let autoFocusOnClear = getPersist('autoFocus','false') == 'true';
+    let clearAnim = getPersist('clearAnim','true') == 'true';
+    let bgMoveType = getPersist('bgMoveType','none');
+
+    function persistLastSetting(id) { persist('lastSetting', id); }
+    function scrollToLastSetting() {
+      let lastSetting = localStorage.getItem('lastSetting');
+      if (lastSetting) {
+        let el = document.getElementById(lastSetting);
+        if (el) el.scrollIntoView({behavior: "smooth", block: "start"});
+      } else {
+        let modal = document.getElementById('settingsForm');
+        modal.scrollTo({top:0, behavior: "smooth"});
+      }
+    }
+
+    function updateHeaderGradient() {
+      let headerClass = (isNight ? headerGradNight : headerGradDay);
+      document.getElementById('mainHeader').className = "gradient-text header-gradient " + headerClass;
+      document.getElementById('cornerLogo').className = "logo-corner gradient-text header-gradient " + headerClass;
+    }
+    function applyMovingBackground(type) {
+      body.classList.remove('bg-move1','bg-move2','bg-move3');
+      if(type !== 'none') body.classList.add(type);
+    }
+    function applyTheme(night){
+      isNight=night;
+      if(night){
+        body.classList.add('night');
+        html.style.setProperty('--textbox-bg-day', 'var(--textbox-bg-night)');
+        html.style.setProperty('--textbox-color-day', 'var(--textbox-color-night)');
+        html.style.setProperty('--focus-glow', '#4562ff88');
+      }else{
+        body.classList.remove('night');
+        html.style.setProperty('--textbox-bg-day', customTextboxColor);
+        html.style.setProperty('--textbox-color-day', '#252a40');
+        html.style.setProperty('--focus-glow', '#2b69ff22');
+      }
+      html.style.setProperty('--main-font', uiFont);
+      html.style.setProperty('--textbox-font', tbFont);
+      html.style.setProperty('--ui-size', uiSize+'em');
+      html.style.setProperty('--textbox-size', textboxSize+'em');
+      body.style.backgroundColor = night ? 'var(--background-night)' : customBgDay;
+      updateHeaderGradient();
+      applyMovingBackground(bgMoveType);
+    }
+    function rgb2hex(rgb){
+      if(!rgb) return "#ffffff";
+      if(rgb.startsWith('#')) return rgb;
+      let rgbArr = rgb.match(/\d+/g);
+      if(!rgbArr) return "#f8fafc";
+      return "#"+ rgbArr.slice(0,3).map(x=>(+x).toString(16).padStart(2,'0')).join('');
+    }
+    function reloadSettings(){
+      document.getElementById('bgColor').value = rgb2hex(customBgDay);
+      document.getElementById('textboxColor').value = rgb2hex(customTextboxColor);
+      document.getElementById('uiFont').value = uiFont;
+      document.getElementById('textboxFont').value = tbFont;
+      document.getElementById('headerGradientDay').value = headerGradDay;
+      document.getElementById('headerGradientNight').value = headerGradNight;
+      document.getElementById('uiSize').value = uiSize;
+      document.getElementById('textboxSize').value = textboxSize;
+      document.getElementById('uiSizeValue').innerText = uiSize.toFixed(2);
+      document.getElementById('textboxSizeValue').innerText = textboxSize.toFixed(2);
+      document.getElementById('autoFocus').checked = autoFocusOnClear;
+      document.getElementById('clearAnimToggle').checked = clearAnim;
+      document.getElementById('bgMoveType').value = bgMoveType;
+      updateRangeSliders();
+    }
+
+    const openBtn = document.getElementById('openSettings');
+    const closeBtn = document.getElementById('closeSettings');
+    const modalBg = document.getElementById('settingsModal');
+    openBtn.onclick = () => {
+      modalBg.classList.add('open');
+      reloadSettings();
+      setTimeout(scrollToLastSetting,200);
+    }
+    closeBtn.onclick = () => {modalBg.classList.remove('open');}
+    modalBg.addEventListener('click',e=>{ if(e.target===modalBg) modalBg.classList.remove('open');});
+
+    document.getElementById('bgColor').addEventListener('input',function(){
+      customBgDay=this.value;persist('bgDay',customBgDay);
+      if(!isNight)body.style.backgroundColor=customBgDay;
+      persistLastSetting('sec-bgColor');
+    });
+    document.getElementById('bgMoveType').addEventListener('change', function(){
+      bgMoveType=this.value;
+      persist('bgMoveType', bgMoveType);
+      applyMovingBackground(bgMoveType);
+      persistLastSetting('sec-bgMove');
+    });
+    document.getElementById('uiFont').addEventListener('change',function(){
+      uiFont=this.value;persist('uiFont',uiFont);
+      html.style.setProperty('--main-font',uiFont);
+      persistLastSetting('sec-uiFont');
+    });
+    document.getElementById('textboxFont').addEventListener('change',function(){
+      tbFont=this.value;persist('tbFont',tbFont);
+      html.style.setProperty('--textbox-font', tbFont);
+      persistLastSetting('sec-textboxFont');
+    });
+    document.getElementById('textboxColor').addEventListener('input',function(){
+      customTextboxColor=this.value;
+      persist('tbColor',customTextboxColor);
+      if(!isNight)html.style.setProperty('--textbox-bg-day',customTextboxColor);
+      persistLastSetting('sec-textboxColor');
+    });
+    document.getElementById('headerGradientDay').addEventListener('change',function(){
+      headerGradDay=this.value;
+      persist('headerGradDay',headerGradDay);
+      if(!isNight)updateHeaderGradient();
+      persistLastSetting('sec-headerGradientDay');
+    });
+    document.getElementById('headerGradientNight').addEventListener('change',function(){
+      headerGradNight=this.value;
+      persist('headerGradNight',headerGradNight);
+      if(isNight)updateHeaderGradient();
+      persistLastSetting('sec-headerGradientNight');
+    });
+    document.getElementById('uiSize').addEventListener('input',function(){
+      uiSize=parseFloat(this.value);
+      persist('uiSize',uiSize);
+      html.style.setProperty('--ui-size',uiSize+'em');
+      document.getElementById('uiSizeValue').innerText=uiSize.toFixed(2);
+      updateRangeSliders();
+      persistLastSetting('sec-uiSize');
+    });
+    document.getElementById('textboxSize').addEventListener('input',function(){
+      textboxSize=parseFloat(this.value);
+      persist('textboxSize',textboxSize);
+      html.style.setProperty('--textbox-size',textboxSize+'em');
+      document.getElementById('textboxSizeValue').innerText=textboxSize.toFixed(2);
+      updateRangeSliders();
+      persistLastSetting('sec-textboxSize');
+    });
+    document.getElementById('autoFocus').addEventListener('change',function(){
+      autoFocusOnClear=this.checked;
+      persist('autoFocus',autoFocusOnClear);
+      persistLastSetting('sec-autoFocus');
+    });
+    document.getElementById('clearAnimToggle').addEventListener('change',function(){
+      clearAnim=this.checked;
+      persist('clearAnim',clearAnim);
+      persistLastSetting('sec-autoFocus');
+    });
+    document.getElementById('resetSettings').addEventListener('click',function(){
+      localStorage.clear(); location.reload();
+    });
+
+    window.addEventListener('keydown',function(e){
+      if(e.key==='Tab' && e.shiftKey && !e.ctrlKey && !e.altKey){
+        e.preventDefault();
+        applyTheme(!isNight);
+      }
+    });
+    function updateRangeSliders() {
+      let rs = [
+        {id: "uiSize", min: 0.8, max: 1.6, val: uiSize},
+        {id: "textboxSize", min: 1.0, max: 3.0, val: textboxSize}
+      ];
+      for(const r of rs) {
+        let el = document.getElementById(r.id);
+        el.style.setProperty('--val', r.val);
+        el.style.setProperty('--min', r.min);
+        el.style.setProperty('--max', r.max);
+        let percent = (r.val - r.min)/(r.max - r.min);
+        el.style.background = `linear-gradient(90deg, var(--slider-fill) 0%, var(--slider-fill) ${percent*100}%, var(--slider-bg) ${percent*100}%, var(--slider-bg) 100%)`;
+      }
+    }
+    const mainTextbox = document.getElementById('mainTextbox');
+    const clearBtn = document.getElementById('clearBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const undoBtn = document.getElementById('undoBtn');
+    const redoBtn = document.getElementById('redoBtn');
+    const countInfo = document.getElementById('countInfo');
+    const toggleCountBtn = document.getElementById('toggleCountBtn');
+    let history = [""], ptr = 0, maxHist=30, lockHist=false;
+    function pushHistory(val) { if(lockHist)return;if(ptr < history.length-1)history=history.slice(0,ptr+1);history.push(val);if(history.length>maxHist)history.shift();ptr=history.length-1;}
+    function undoText(){ if(ptr>0){ptr--;lockHist=true;mainTextbox.value=history[ptr];lockHist=false;updateInfo();}}
+    function redoText(){ if(ptr<history.length-1){ptr++;lockHist=true;mainTextbox.value=history[ptr];lockHist=false;updateInfo();}}
+    mainTextbox.addEventListener('input',()=>{if(!lockHist){pushHistory(mainTextbox.value);}updateInfo();});
+    function clearAnimOutIn(cb) {
+      if(!clearAnim) { cb && cb(); return;}
+      const tb=mainTextbox;
+      tb.classList.add('clear-anim');
+      tb.addEventListener('animationend',function handler(){
+        tb.classList.remove('clear-anim');
+        cb&&cb();
+        tb.classList.add('clear-anim-in');
+        tb.addEventListener('animationend',function handler2(){
+          tb.classList.remove('clear-anim-in');
+          tb.removeEventListener('animationend',handler2);
+        });
+        tb.removeEventListener('animationend',handler);
+      });
+    }
+    mainTextbox.addEventListener('keydown',function(e){
+      if(e.key==="Enter"){
+        e.preventDefault();
+        clearAnimOutIn(function(){
+          mainTextbox.value="";
+          pushHistory("");
+          updateInfo();
+          if(autoFocusOnClear) setTimeout(()=>mainTextbox.focus(),220);
+        });
+      }
+      if(e.key==="z"&&((e.ctrlKey&&!e.shiftKey) || e.metaKey)) { e.preventDefault(); undoText();}
+      if(e.key==="y"&&((e.ctrlKey&&!e.shiftKey) || e.metaKey)) { e.preventDefault(); redoText();}
+    });
+    clearBtn.addEventListener('click',function(){
+      clearAnimOutIn(function(){
+        mainTextbox.value="";
+        pushHistory("");
+        updateInfo();
+        if(autoFocusOnClear) setTimeout(()=>mainTextbox.focus(),220);
+      });
+    });
+    undoBtn.addEventListener('click',undoText);
+    redoBtn.addEventListener('click',redoText);
+    copyBtn.addEventListener('click',()=>{
+      mainTextbox.select();
+      document.execCommand('copy');
+      copyBtn.style.transform='scale(1.13)';
+      copyBtn.style.background='#3ba1fa';
+      setTimeout(()=>{copyBtn.style.transform='';copyBtn.style.background='';},280);
+    });
+    function wordCount(str){
+      let m = String(str).match(/[^\s]+/g);
+      return m ? m.length : 0;
+    }
+    function updateInfo(){
+      if(countInfo.style.display==="none") return;
+      let chars = mainTextbox.value.length;
+      let words = wordCount(mainTextbox.value);
+      countInfo.textContent = `Characters: ${chars} | Words: ${words}`;
+    }
+    mainTextbox.addEventListener('input',updateInfo);
+    mainTextbox.addEventListener('focus',()=>countInfo.style.opacity=1);
+    let countVisible = true;
+    toggleCountBtn.addEventListener('click',()=>{
+      countVisible=!countVisible;
+      countInfo.style.display=countVisible?'block':'none';
+      toggleCountBtn.setAttribute('aria-pressed',countVisible);
+    });
+    window.onload=()=>{
+      mainTextbox.focus();
+      updateInfo();
+      updateHeaderGradient();
+      applyTheme(false);
+      applyMovingBackground(bgMoveType);
+    }
+  </script>
+</body>
+</html>
