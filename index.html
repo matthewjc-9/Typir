@@ -612,16 +612,94 @@ body.bg-move6::before {
     body.night .settings-modal .reset-btn:hover {
       background: #1d203a; color: #bfd3f2;
     }
-    @media (max-width:700px){#app-header{padding-top:1rem}}
-    @media (max-width:600px){
+    @media (max-width: 700px) {
+      #app-header {
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.2em;
+        font-size: 0.95rem;
+        width: 100vw;
+      }
+      .logo-corner {
+        position: static;
+        display: block;
+        font-size: 0.95rem;
+        margin-bottom: 0;
+        left: unset; top: unset;
+        text-align: left;
+        flex: 0 0 auto;
+        min-width: 2.5em;
+      }
+      .gradient-text.header-gradient#mainHeader {
+        font-size: 1.08rem !important;
+        margin-bottom: 0;
+        flex: 1 1 0%;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 70vw;
+        justify-self: center;
+      }
+      .settings-btn {
+        position: static;
+        display: block;
+        margin: 0;
+        width: auto;
+        max-width: 2.5em;
+        font-size: 1.2rem;
+        padding: 0.45em 0.7em;
+        flex: 0 0 auto;
+      }
+      .toolbar {
+        flex-wrap: wrap;
+        gap: 0.5em;
+        max-width: 99vw;
+      }
+    }
+    @media (max-width: 600px) {
       .curved-textbox-container { max-width:99vw; padding:1em;}
-      .settings-modal { min-width:97vw; padding:0;}
-      #app-header{ padding:1.0rem 0 1.7rem 0; }
+      .settings-modal {
+        min-width: 100vw;
+        max-width: 100vw;
+        width: 100vw !important;
+        left: 0 !important;
+        top: 0 !important;
+        transform: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        box-sizing: border-box;
+        overflow-y: auto;
+        z-index: 10001;
+      }
+      .modal-bg.open {
+        display: block;
+        position: fixed;
+        left: 0; top: 0; right: 0; bottom: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 10000;
+      }
+      #app-header{ padding:0.7rem 0 1.1rem 0; }
       .modal-bg { animation: none !important; }
-      :root { --header-size: 1.32rem; }
-      .settings-modal-header { padding: 0.8rem 1em 0.9rem 1em;}
-      .settings-modal .section { margin: 1.08em 0.5em 1em 0.5em; padding: 0.9em 0.7em 0.3em 0.9em;}
-      .settings-modal .reset-btn { margin-left:0.4em; margin-right:0.4em; width:calc(100% - 0.8em);}
+      :root { --header-size: 1.1rem; }
+      .settings-modal-header {
+        padding: 0.7rem 0.7em 0.7rem 0.7em;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+      }
+      .settings-modal .section {
+        margin: 0.7em 0.2em 0.7em 0.2em;
+        padding: 0.7em 0.5em 0.2em 0.5em;
+      }
+      .settings-modal .reset-btn {
+        margin-left:0.2em; margin-right:0.2em; width:calc(100% - 0.4em);
+      }
     }
   </style>
 </head>
@@ -629,7 +707,7 @@ body.bg-move6::before {
   <div id="app-header">
     <span class="logo-corner gradient-text header-gradient" id="cornerLogo">What Logo</span>
     <span class="gradient-text header-gradient" id="mainHeader" style="font-size:2rem; font-weight:800;">Typir</span>
-    <button class="settings-btn" id="openSettings" aria-label="Open Settings">⚙️ Settings</button>
+    <button class="settings-btn" id="openSettings" aria-label="Open Settings">⚙️</button>
   </div>
   <div class="center-area">
     <div class="curved-textbox-container">
@@ -827,73 +905,11 @@ body.bg-move6::before {
     }
     function applyTheme(night){
       isNight=night;
-      if(night){
-        body.classList.add('night');
-        html.style.setProperty('--textbox-bg-day', 'var(--textbox-bg-night)');
-        html.style.setProperty('--textbox-color-day', 'var(--textbox-color-night)');
-        html.style.setProperty('--focus-glow', '#4562ff88');
-      }else{
-        body.classList.remove('night');
-        html.style.setProperty('--textbox-bg-day', customTextboxColor);
-        html.style.setProperty('--textbox-color-day', '#252a40');
-        html.style.setProperty('--focus-glow', '#2b69ff22');
-      }
-      html.style.setProperty('--main-font', uiFont);
-      html.style.setProperty('--textbox-font', tbFont);
-      html.style.setProperty('--ui-size', uiSize+'em');
-      html.style.setProperty('--textbox-size', textboxSize+'em');
-      body.style.backgroundColor = night ? 'var(--background-night)' : customBgDay;
-      updateHeaderGradient();
-      applyMovingBackground(bgMoveType);
-    }
-    function rgb2hex(rgb){
-      if(!rgb) return "#ffffff";
-      if(rgb.startsWith('#')) return rgb;
-      let rgbArr = rgb.match(/\d+/g);
-      if(!rgbArr) return "#f8fafc";
-      return "#"+ rgbArr.slice(0,3).map(x=>(+x).toString(16).padStart(2,'0')).join('');
-    }
-    function reloadSettings(){
-      document.getElementById('bgColor').value = rgb2hex(customBgDay);
-      document.getElementById('textboxColor').value = rgb2hex(customTextboxColor);
-      document.getElementById('uiFont').value = uiFont;
-      document.getElementById('textboxFont').value = tbFont;
-      document.getElementById('headerGradientDay').value = headerGradDay;
-      document.getElementById('headerGradientNight').value = headerGradNight;
-      document.getElementById('uiSize').value = uiSize;
-      document.getElementById('textboxSize').value = textboxSize;
-      document.getElementById('uiSizeValue').innerText = uiSize.toFixed(2);
-      document.getElementById('textboxSizeValue').innerText = textboxSize.toFixed(2);
-      document.getElementById('autoFocus').checked = autoFocusOnClear;
-      document.getElementById('clearAnimToggle').checked = clearAnim;
-      document.getElementById('bgMoveType').value = bgMoveType;
-      updateRangeSliders();
-    }
-
-    const openBtn = document.getElementById('openSettings');
-    const closeBtn = document.getElementById('closeSettings');
-    const modalBg = document.getElementById('settingsModal');
-    const toggleThemeBtn = document.getElementById('toggleThemeBtn');
-    toggleThemeBtn.onclick = () => applyTheme(!isNight);
-    openBtn.onclick = () => {
-      modalBg.classList.add('open');
-      reloadSettings();
-      setTimeout(scrollToLastSetting,200);
-    }
-    closeBtn.onclick = () => {modalBg.classList.remove('open');}
-    modalBg.addEventListener('click',e=>{ if(e.target===modalBg) modalBg.classList.remove('open');});
-
-    document.getElementById('bgColor').addEventListener('input',function(){
-      customBgDay=this.value;persist('bgDay',customBgDay);
-      if(!isNight)body.style.backgroundColor=customBgDay;
-      persistLastSetting('sec-bgColor');
-    });
-    document.getElementById('bgMoveType').addEventListener('change', function(){
-      bgMoveType=this.value;
-      persist('bgMoveType', bgMoveType);
       applyMovingBackground(bgMoveType);
       persistLastSetting('sec-bgMove');
-    });
+    } // <-- Add this closing brace to end applyTheme
+
+    // ...rest of applyTheme logic if needed...
     document.getElementById('uiFont').addEventListener('change',function(){
       uiFont=this.value;persist('uiFont',uiFont);
       html.style.setProperty('--main-font',uiFont);
@@ -1047,6 +1063,24 @@ body.bg-move6::before {
       countInfo.style.display=countVisible?'block':'none';
       toggleCountBtn.setAttribute('aria-pressed',countVisible);
     });
+    // Settings modal open/close logic
+    const openSettingsBtn = document.getElementById('openSettings');
+    const settingsModalBg = document.getElementById('settingsModal');
+    const closeSettingsBtn = document.getElementById('closeSettings');
+
+    openSettingsBtn.addEventListener('click', function() {
+      settingsModalBg.classList.add('open');
+      // Optionally focus first input in settings
+      setTimeout(() => {
+        const firstInput = settingsModalBg.querySelector('input,select,button');
+        if(firstInput) firstInput.focus();
+      }, 120);
+    });
+
+    closeSettingsBtn.addEventListener('click', function() {
+      settingsModalBg.classList.remove('open');
+    });
+
     window.onload=()=>{
       mainTextbox.focus();
       updateInfo();
