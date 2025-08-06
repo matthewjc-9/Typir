@@ -36,7 +36,134 @@
       --bg-move1-speed: 60s;
       --bg-move2-speed: 100s;
       --bg-move3-speed: 150s;
+      --bg-move4-speed: 80s;
+      --bg-move5-speed: 60s;
+      --bg-move6-speed: 90s;
     }
+
+/* Rainbow Stripes */
+@keyframes rainbowStripesMove {
+  0% {background-position: 0 0;}
+  100% {background-position: 400px 0;}
+}
+/* Starfield */
+@keyframes starfieldMove {
+  0% {background-position: 0 0;}
+  100% {background-position: 1000px 1000px;}
+}
+/* Animated Dots */
+@keyframes dotsMove {
+  0% {background-position: 0 0, 20px 20px;}
+  100% {background-position: 40px 40px, 60px 60px;}
+}
+@keyframes dotsSpin {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}
+body.bg-move4 {
+  background-image: repeating-linear-gradient(90deg, red, orange 16%, yellow 33%, green 50%, blue 67%, indigo 83%, violet 100%);
+  background-size: 400px 100vh;
+  animation: rainbowStripesMove var(--bg-move4-speed) linear infinite;
+}
+body.bg-move5 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+body.bg-move5::before {
+  content: "";
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 200vw;
+  height: 200vh;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(white 6px, transparent 6px),
+    radial-gradient(white 8px, transparent 8px),
+    radial-gradient(white 4px, transparent 4px),
+    radial-gradient(white 2.5px, transparent 2.5px),
+    radial-gradient(white 3.5px, transparent 3.5px),
+    radial-gradient(white 5.5px, transparent 5.5px),
+    radial-gradient(white 7px, transparent 7px),
+    radial-gradient(white 2px, transparent 2px);
+  background-size: 900px 900px, 1300px 1300px, 1700px 1700px, 600px 600px, 1100px 1100px, 1500px 1500px, 2000px 2000px, 750px 750px;
+  background-position: 0 0, 450px 450px, 900px 900px, 300px 300px, 700px 700px, 1200px 1200px, 1600px 1600px, 200px 200px;
+  background-color: #10182a;
+  animation:
+    starfieldMove calc(var(--bg-move5-speed) * 0.7) linear infinite,
+    starfieldMove calc(var(--bg-move5-speed) * 0.8) linear infinite,
+    starfieldMove calc(var(--bg-move5-speed) * 0.9) linear infinite,
+    starfieldMove var(--bg-move5-speed) linear infinite,
+    starfieldMove calc(var(--bg-move5-speed) * 1.1) linear infinite,
+    starfieldMove calc(var(--bg-move5-speed) * 1.2) linear infinite,
+    starfieldMove calc(var(--bg-move5-speed) * 1.3) linear infinite,
+    starfieldMove calc(var(--bg-move5-speed) * 1.4) linear infinite;
+  animation-delay: 0s, 1s, 2s, 3s, 4s, 5s, 6s, 7s;
+  will-change: background-position;
+}
+
+body.bg-move5 .shooting-star {
+  position: fixed;
+  z-index: 1;
+  pointer-events: none;
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, white, rgba(255,255,255,0));
+  border-radius: 2px;
+  opacity: 0.85;
+  box-shadow: 0 0 8px 2px white;
+  animation: shootingStarMove 1.1s linear forwards;
+}
+
+@keyframes shootingStarMove {
+  0% {
+    opacity: 0;
+    transform: translateY(0) translateX(0) scaleX(0.7) rotate(var(--shooting-angle, 25deg));
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0) translateX(0) scaleX(1) rotate(var(--shooting-angle, 25deg));
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(var(--shooting-dy, 200px)) translateX(var(--shooting-dx, 600px)) scaleX(1) rotate(var(--shooting-angle, 25deg));
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(var(--shooting-dy, 200px)) translateX(var(--shooting-dx, 600px)) scaleX(0.7) rotate(var(--shooting-angle, 25deg));
+  }
+}
+body.bg-move6 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+body.bg-move6::before {
+  content: "";
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 160vw;
+  height: 160vh;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, #2b69ff 18px, transparent 19px),
+    radial-gradient(circle, #60a7ff 13px, transparent 14px);
+  background-size: 90px 90px, 130px 130px;
+  background-position: 0 0, 45px 45px;
+  animation:
+    dotsMove var(--bg-move6-speed) linear infinite,
+    dotsMove calc(var(--bg-move6-speed) * 1.3) linear infinite,
+    dotsSpin 22s linear infinite;
+  animation-delay: 0s, 1.5s, 0s;
+  will-change: background-position, transform;
+}
+/* Removed stray closing braces */
     .g-blue-navy { --header-gradient: linear-gradient(90deg, navy 0%, #51beff 100%);}
     .g-mint-blue { --header-gradient: linear-gradient(90deg, #58e3f3 0%, #1a237e 100%);}
     .g-violet-blue { --header-gradient: linear-gradient(90deg, #6d32ff 0%, #23c6e3 100%);}
@@ -548,6 +675,9 @@
           <option value="bg-move1">Wave Pattern</option>
           <option value="bg-move2">Floating Circles</option>
           <option value="bg-move3">Diagonal Stripes</option>
+          <option value="bg-move4">Rainbow Stripes</option>
+          <option value="bg-move5">Starfield</option>
+          <option value="bg-move6">Animated Dots</option>
         </select>
       </div>
       <div class="section" id="sec-uiFont">
@@ -646,14 +776,54 @@
       }
     }
 
+    // --- Shooting Star Logic ---
+    let shootingStarTimeout = null;
+    function spawnShootingStar() {
+      if (!body.classList.contains('bg-move5')) return;
+      // Remove any existing shooting star
+      const prev = document.querySelector('.shooting-star');
+      if (prev) prev.remove();
+      // Randomize start position and angle
+      const minY = 10, maxY = window.innerHeight * 0.5;
+      const startY = Math.random() * (maxY - minY) + minY;
+      const minAngle = 18, maxAngle = 35;
+      const angle = Math.random() * (maxAngle - minAngle) + minAngle;
+      const dx = Math.random() * 400 + 500; // 500-900px
+      const dy = Math.random() * 80 + 120; // 120-200px
+      const left = Math.random() * (window.innerWidth * 0.5);
+      const star = document.createElement('div');
+      star.className = 'shooting-star';
+      star.style.top = `${startY}px`;
+      star.style.left = `${left}px`;
+      star.style.setProperty('--shooting-angle', angle + 'deg');
+      star.style.setProperty('--shooting-dx', dx + 'px');
+      star.style.setProperty('--shooting-dy', dy + 'px');
+      document.body.appendChild(star);
+      setTimeout(() => { star.remove(); }, 1200);
+      // Schedule next shooting star randomly in 2-7 seconds
+      shootingStarTimeout = setTimeout(spawnShootingStar, Math.random() * 5000 + 2000);
+    }
+    function maybeStartShootingStar() {
+      if (shootingStarTimeout) clearTimeout(shootingStarTimeout);
+      if (body.classList.contains('bg-move5')) {
+        shootingStarTimeout = setTimeout(spawnShootingStar, Math.random() * 2000 + 1000);
+      }
+    }
+
+    // --- End Shooting Star Logic ---
     function updateHeaderGradient() {
       let headerClass = (isNight ? headerGradNight : headerGradDay);
       document.getElementById('mainHeader').className = "gradient-text header-gradient " + headerClass;
       document.getElementById('cornerLogo').className = "logo-corner gradient-text header-gradient " + headerClass;
     }
     function applyMovingBackground(type) {
-      body.classList.remove('bg-move1','bg-move2','bg-move3');
+      body.classList.remove('bg-move1','bg-move2','bg-move3','bg-move4','bg-move5','bg-move6');
+      if (shootingStarTimeout) clearTimeout(shootingStarTimeout);
+      // Remove any shooting star if present
+      const prev = document.querySelector('.shooting-star');
+      if (prev) prev.remove();
       if(type !== 'none') body.classList.add(type);
+      if(type === 'bg-move5') maybeStartShootingStar();
     }
     function applyTheme(night){
       isNight=night;
@@ -883,9 +1053,8 @@
       updateHeaderGradient();
       applyTheme(false);
       applyMovingBackground(bgMoveType);
+      if(bgMoveType === 'bg-move5') maybeStartShootingStar();
     }
   </script>
 </body>
 </html>
-
-
