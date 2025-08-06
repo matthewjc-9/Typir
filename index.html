@@ -524,6 +524,7 @@
         <button class="btn" id="toggleCountBtn" aria-pressed="true" aria-label="Toggle live word and character count" title="Toggle Word and Character Count">
           👁️ Count
         </button>
+        <button class="btn" id="toggleThemeBtn" aria-label="Toggle Day/Night Mode" title="Toggle Day/Night Mode">🌙/☀️</button>
       </div>
     </div>
   </div>
@@ -702,6 +703,8 @@
     const openBtn = document.getElementById('openSettings');
     const closeBtn = document.getElementById('closeSettings');
     const modalBg = document.getElementById('settingsModal');
+    const toggleThemeBtn = document.getElementById('toggleThemeBtn');
+    toggleThemeBtn.onclick = () => applyTheme(!isNight);
     openBtn.onclick = () => {
       modalBg.classList.add('open');
       reloadSettings();
@@ -884,4 +887,5 @@
   </script>
 </body>
 </html>
+
 
