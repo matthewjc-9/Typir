@@ -5,6 +5,7 @@
   <title>Typir - What Logo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Fira+Mono&family=Roboto&display=swap" rel="stylesheet">
+  <link id="dynamic-favicon" rel="icon" type="image/svg+xml" href="">
   <style>
     :root {
       --primary-gradient-day: linear-gradient(90deg, navy 0%, #2b69ff 100%);
@@ -458,6 +459,55 @@ body.bg-move6::before {
       max-width: 590px;
       box-sizing: border-box;
     }
+    .toolbar.top-layout {
+  order: -1;
+  margin-top: 0;
+  margin-bottom: 1.2em;
+}
+.toolbar.bottom-layout {
+  order: 2;
+  margin-top: 1.45rem;
+  margin-bottom: 0;
+}
+.toolbar.floating-layout {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1.2em;
+  top: auto;
+  transform: none;
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 4px 24px 0 #2b69ff22;
+  border-radius: 1.5em;
+  z-index: 100;
+  padding: 0.7em 1.2em;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+body.night .toolbar.floating-layout {
+  background: rgba(34,37,64,0.97);
+  box-shadow: 0 4px 24px 0 #1e223055;
+}
+.curved-textbox-container { position: relative; }
+@media (max-width: 700px) {
+  .toolbar.floating-layout {
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    top: auto !important;
+    transform: none !important;
+    width: 100%;
+    max-width: 100%;
+    padding: 0.5em 0.3em;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    margin-top: 1em;
+  }
+}
     .curved-textbox.clear-anim {
       animation: clearOut 0.37s cubic-bezier(.56,-0.13,.34,1.4) 1;
     }
@@ -900,6 +950,15 @@ body.bg-move6::before {
         <label><input type="checkbox" id="autoFocus" /> Focus textbox after clear</label>
         <label><input type="checkbox" id="clearAnimToggle" checked/> Animate clear</label>
       </div>
+      <div class="section" id="sec-toolbarLayout">
+        <label for="toolbarLayout">Toolbar Layout</label>
+        <small>Choose where the toolbar appears.</small>
+        <select id="toolbarLayout">
+          <option value="bottom">Bottom (default)</option>
+          <option value="top">Top</option>
+          <option value="floating">Floating</option>
+        </select>
+      </div>
       <button type="button" class="reset-btn" id="resetSettings">Reset to Default</button>
     </form>
   </div>
@@ -927,7 +986,25 @@ body.bg-move6::before {
     let autoFocusOnClear = getPersist('autoFocus','false') == 'true';
     let clearAnim = getPersist('clearAnim','true') == 'true';
     let bgMoveType = getPersist('bgMoveType','none');
-
+    let toolbarLayout = getPersist('toolbarLayout', 'bottom');
+    function applyToolbarLayout() {
+  const toolbar = document.querySelector('.toolbar');
+  if (!toolbar) return;
+  toolbar.classList.remove('top-layout', 'bottom-layout', 'floating-layout');
+  const container = document.querySelector('.curved-textbox-container');
+  if (toolbarLayout === 'top') {
+    toolbar.classList.add('top-layout');
+    if (container.firstChild !== toolbar) {
+      container.insertBefore(toolbar, container.firstChild);
+    }
+  } else if (toolbarLayout === 'floating') {
+    toolbar.classList.add('floating-layout');
+    container.appendChild(toolbar);
+  } else {
+    toolbar.classList.add('bottom-layout');
+    container.appendChild(toolbar);
+  }
+}
     function persistLastSetting(id) { persist('lastSetting', id); }
     function scrollToLastSetting() {
       let lastSetting = localStorage.getItem('lastSetting');
@@ -1009,6 +1086,7 @@ function applyTheme(night){
   // Update theme button icon
   const themeBtn = document.getElementById('toggleThemeBtn');
   if (themeBtn) themeBtn.textContent = isNight ? '☀️ Day' : '🌙 Night';
+  setFavicon(isNight);
 }
 
     // ...rest of applyTheme logic if needed...
@@ -1069,7 +1147,16 @@ function applyTheme(night){
     document.getElementById('resetSettings').addEventListener('click',function(){
       localStorage.clear(); location.reload();
     });
-
+    document.getElementById('toolbarLayout').addEventListener('change', function() {
+  toolbarLayout = this.value;
+  persist('toolbarLayout', toolbarLayout);
+  applyToolbarLayout();
+  persistLastSetting('sec-toolbarLayout');
+});
+window.addEventListener('DOMContentLoaded', function() {
+  applyToolbarLayout();
+  setFavicon(isNight);
+});
 window.addEventListener('keydown',function(e){
   if(e.key==='Tab' && e.shiftKey && !e.ctrlKey && !e.altKey){
     e.preventDefault();
@@ -1305,6 +1392,11 @@ window.onload=()=>{
   // Set color input to current value
   const tbFontColorInput = document.getElementById('textboxFontColor');
   if(tbFontColorInput && customTextboxFontColor) tbFontColorInput.value = customTextboxFontColor;
+  if(document.getElementById('toolbarLayout')) {
+    document.getElementById('toolbarLayout').value = toolbarLayout;
+    applyToolbarLayout();
+  }
+  setFavicon(isNight);
 }
   </script>
 </body>
