@@ -735,6 +735,15 @@ body.bg-move6::before {
         box-sizing: border-box;
         overflow-y: auto;
         z-index: 10001;
+        display: flex;
+        flex-direction: column;
+      }
+      .settings-modal form, .settings-modal .settings-modal-header, .settings-modal .section {
+        flex-shrink: 0;
+      }
+      .settings-modal .reset-btn {
+        margin-left:0.2em; margin-right:0.2em; width:calc(100% - 0.4em);
+        margin-bottom: 1.2em;
       }
       .modal-bg.open {
         display: block;
@@ -755,9 +764,6 @@ body.bg-move6::before {
       .settings-modal .section {
         margin: 0.7em 0.2em 0.7em 0.2em;
         padding: 0.7em 0.5em 0.2em 0.5em;
-      }
-      .settings-modal .reset-btn {
-        margin-left:0.2em; margin-right:0.2em; width:calc(100% - 0.4em);
       }
     }
   </style>
@@ -844,6 +850,11 @@ body.bg-move6::before {
         <small>Change the background color of the typing area in Day mode.</small>
         <input type="color" id="textboxColor" name="textboxColor">
       </div>
+      <div class="section" id="sec-textboxFontColor">
+        <label for="textboxFontColor">Textbox Font Color <small style="opacity:0.7;">(Day mode)</small></label>
+        <small>Change the color of the text you type in the main box (Day mode).</small>
+        <input type="color" id="textboxFontColor" name="textboxFontColor">
+      </div>
       <div class="section" id="sec-headerGradientDay">
         <label for="headerGradientDay">Day Mode Header Gradient</label>
         <small>Choose header gradient for Day theme.</small>
@@ -891,6 +902,13 @@ body.bg-move6::before {
     let isNight = false;
     let customBgDay = getPersist('bgDay', getComputedStyle(html).getPropertyValue('--background-day'));
     let customTextboxColor = getPersist('tbColor', getComputedStyle(html).getPropertyValue('--textbox-bg-day'));
+    let customTextboxFontColor = getPersist('tbFontColor', getComputedStyle(html).getPropertyValue('--textbox-color-day'));
+    document.getElementById('textboxFontColor').addEventListener('input',function(){
+      customTextboxFontColor=this.value;
+      persist('tbFontColor',customTextboxFontColor);
+      if(!isNight)html.style.setProperty('--textbox-color-day',customTextboxFontColor);
+      persistLastSetting('sec-textboxFontColor');
+    });
     let uiFont = getPersist('uiFont', getComputedStyle(html).getPropertyValue('--main-font'));
     let tbFont = getPersist('tbFont', getComputedStyle(html).getPropertyValue('--textbox-font'));
     let headerGradDay = getPersist('headerGradDay','g-blue-navy');
@@ -1144,9 +1162,14 @@ body.bg-move6::before {
       mainTextbox.focus();
       updateInfo();
       updateHeaderGradient();
+      // Apply custom textbox font color on load (day mode)
+      if(!isNight && customTextboxFontColor) html.style.setProperty('--textbox-color-day', customTextboxFontColor);
       applyTheme(false);
       applyMovingBackground(bgMoveType);
       if(bgMoveType === 'bg-move5') maybeStartShootingStar();
+      // Set color input to current value
+      const tbFontColorInput = document.getElementById('textboxFontColor');
+      if(tbFontColorInput && customTextboxFontColor) tbFontColorInput.value = customTextboxFontColor;
     }
   </script>
 </body>
