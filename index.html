@@ -1131,6 +1131,13 @@ body.bg-move6::before {
       let chars = mainTextbox.value.length;
       let words = wordCount(mainTextbox.value);
       countInfo.textContent = `Characters: ${chars} | Words: ${words}`;
+      if(chars >= 1000000) {
+        countInfo.style.color = '#0a6b1a'; // dark green
+      } else if(chars >= 1000) {
+        countInfo.style.color = '#1dbf3a'; // light green
+      } else {
+        countInfo.style.color = body.classList.contains('night') ? '#98a5d2' : '#6681b2';
+      }
     }
     mainTextbox.addEventListener('input',updateInfo);
     mainTextbox.addEventListener('focus',()=>countInfo.style.opacity=1);
