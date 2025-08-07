@@ -442,6 +442,12 @@ body.bg-move6::before {
     }
     .btn svg { width:18px; height:18px; fill:none; stroke:white; stroke-width:2.25; }
     .btn:hover { background:#2155e2; transform:scale(1.045);}
+    .btn.dragging, .btn.dragging:hover, .btn.dragging:active {
+      background: var(--accent-day) !important;
+      box-shadow: 0 3px 18px 0 rgba(81,87,194,.10) !important;
+      transform: none !important;
+      cursor: grabbing !important;
+    }
     body.night .btn { background:var(--accent-night); color:#eef2ff; }
     body.night .btn:hover { background:#1a274a;}
     .toolbar {
@@ -1144,16 +1150,19 @@ if (themeBtn) {
     redoBtn.addEventListener('click',redoText);
     // --- Copy Button Click and Slide-to-Paste ---
     let dragStartX = null, dragActive = false;
+    // Mouse events
     copyBtn.addEventListener('mousedown', function(e) {
       dragStartX = e.clientX;
       dragActive = true;
+      copyBtn.classList.add('dragging');
     });
     document.addEventListener('mousemove', function(e) {
       if (!dragActive || dragStartX === null) return;
       let dx = e.clientX - dragStartX;
-      if (dx > 60) { // Slide right threshold
+      if (dx < -60) { // Slide left threshold
         dragActive = false;
         dragStartX = null;
+        copyBtn.classList.remove('dragging');
         // Try to paste from clipboard
         if (navigator.clipboard && navigator.clipboard.readText) {
           navigator.clipboard.readText().then(text => {
@@ -1166,17 +1175,54 @@ if (themeBtn) {
         } else {
           alert('Clipboard paste not supported in this browser.');
         }
-        copyBtn.style.transform = 'translateX(60px) scale(1.13)';
+        copyBtn.style.transform = 'translateX(-60px) scale(1.13)';
         setTimeout(()=>{copyBtn.style.transform='';}, 350);
       }
     });
     document.addEventListener('mouseup', function(e) {
       dragActive = false;
       dragStartX = null;
+      copyBtn.classList.remove('dragging');
     });
     copyBtn.addEventListener('mouseleave', function(e) {
       dragActive = false;
       dragStartX = null;
+      copyBtn.classList.remove('dragging');
+    });
+    // Touch events for mobile
+    copyBtn.addEventListener('touchstart', function(e) {
+      if (e.touches.length === 1) {
+        dragStartX = e.touches[0].clientX;
+        dragActive = true;
+        copyBtn.classList.add('dragging');
+      }
+    });
+    document.addEventListener('touchmove', function(e) {
+      if (!dragActive || dragStartX === null || e.touches.length !== 1) return;
+      let dx = e.touches[0].clientX - dragStartX;
+      if (dx < -60) {
+        dragActive = false;
+        dragStartX = null;
+        copyBtn.classList.remove('dragging');
+        if (navigator.clipboard && navigator.clipboard.readText) {
+          navigator.clipboard.readText().then(text => {
+            if (text) {
+              mainTextbox.value = text;
+              pushHistory(text);
+              updateInfo();
+            }
+          });
+        } else {
+          alert('Clipboard paste not supported in this browser.');
+        }
+        copyBtn.style.transform = 'translateX(-60px) scale(1.13)';
+        setTimeout(()=>{copyBtn.style.transform='';}, 350);
+      }
+    }, {passive:true});
+    document.addEventListener('touchend', function(e) {
+      dragActive = false;
+      dragStartX = null;
+      copyBtn.classList.remove('dragging');
     });
     copyBtn.addEventListener('click',()=>{
       if (dragActive) return; // Prevent click if drag
