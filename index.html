@@ -324,11 +324,24 @@ body.bg-move6::before {
       box-shadow: 0 4px 14px 0 rgba(39,63,112,0.10);
       cursor:pointer;
       font-size:1rem;
-      z-index:12;
+      z-index:1200;
       opacity:0.98;
       transition:background 0.25s, box-shadow 0.28s, color 0.3s;
       outline-offset:2px;
       user-select:none;
+    }
+
+    @media (min-width: 701px) {
+      .settings-btn {
+        position: absolute;
+        right: 2vw;
+        top: 1.2em;
+        left: auto;
+        bottom: auto;
+        margin: 0;
+        z-index: 1200;
+        box-shadow: 0 4px 18px 0 rgba(39,63,112,0.13);
+      }
     }
     .settings-btn:hover { box-shadow:0 1px 18px #19378055; }
     body.night .settings-btn {
@@ -452,20 +465,55 @@ body.bg-move6::before {
     }
     .modal-bg.open { display:block; }
     .settings-modal {
-      position:absolute; left:50%;top:11vh;
-      transform:translateX(-50%);
-      background:#fff;
-      border-radius:1.36em;
+      position: absolute;
+      left: 50%;
+      top: 11vh;
+      transform: translateX(-50%);
+      background: #fff;
+      border-radius: 1.36em;
       padding: 0 0 2.1rem 0;
-      min-width:340px; max-width:93vw; color:#1e2230;
+      min-width: 340px;
+      max-width: 93vw;
+      color: #1e2230;
       box-shadow: var(--modal-shadow);
       animation: fadeIn 0.22s forwards;
-      font-family:var(--main-font);
+      font-family: var(--main-font);
       transition: background 0.3s, color 0.3s;
       max-height: 80vh;
       overflow-y: auto;
       scroll-behavior: smooth;
       border: 2.5px solid #e0eaff;
+    }
+
+    @media (min-width: 701px) {
+      .modal-bg.open {
+        display: block;
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 10000;
+      }
+      .settings-modal {
+        position: fixed !important;
+        left: auto !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        top: auto !important;
+        transform: none !important;
+        min-width: 340px;
+        width: auto !important;
+        max-width: 95vw !important;
+        max-height: 90vh !important;
+        height: auto !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+        box-shadow: var(--modal-shadow);
+        overflow-y: auto !important;
+      }
     }
     body.night .settings-modal {
       background:#222540;
