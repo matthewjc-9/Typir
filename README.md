@@ -22,10 +22,6 @@ Typir is a web-based project that challenges users to identify logos. Built enti
 
 Contributions are welcome! If you’d like to add more logos or improve the game, feel free to open an issue or submit a pull request.
 
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-
 ---
 
 **Typir by What Logo**
