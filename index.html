@@ -460,54 +460,132 @@ body.bg-move6::before {
       box-sizing: border-box;
     }
     .toolbar.top-layout {
-  order: -1;
-  margin-top: 0;
-  margin-bottom: 1.2em;
-}
-.toolbar.bottom-layout {
-  order: 2;
-  margin-top: 1.45rem;
-  margin-bottom: 0;
-}
-.toolbar.floating-layout {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1.2em;
-  top: auto;
-  transform: none;
-  background: rgba(255,255,255,0.92);
-  box-shadow: 0 4px 24px 0 #2b69ff22;
-  border-radius: 1.5em;
-  z-index: 100;
-  padding: 0.7em 1.2em;
-  margin: 0 auto;
-  width: 100%;
-  max-width: 100%;
-  flex-wrap: wrap;
-  box-sizing: border-box;
-}
-body.night .toolbar.floating-layout {
-  background: rgba(34,37,64,0.97);
-  box-shadow: 0 4px 24px 0 #1e223055;
-}
-.curved-textbox-container { position: relative; }
-@media (max-width: 700px) {
-  .toolbar.floating-layout {
-    position: static !important;
-    left: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    top: auto !important;
-    transform: none !important;
-    width: 100%;
-    max-width: 100%;
-    padding: 0.5em 0.3em;
-    flex-wrap: wrap;
-    box-sizing: border-box;
-    margin-top: 1em;
-  }
-}
+      order: -1;
+      margin-top: 0;
+      margin-bottom: 1.2em;
+    }
+    .toolbar.bottom-layout {
+      order: 2;
+      margin-top: 1.45rem;
+      margin-bottom: 0;
+    }
+    .toolbar.floating-layout {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1.2em;
+      top: auto;
+      transform: none;
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 4px 24px 0 #2b69ff22;
+      border-radius: 1.5em;
+      z-index: 100;
+      padding: 0.7em 1.2em;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 100%;
+      flex-wrap: wrap;
+      box-sizing: border-box;
+    }
+    body.night .toolbar.floating-layout {
+      background: rgba(34,37,64,0.97);
+      box-shadow: 0 4px 24px 0 #1e223055;
+    }
+    .toolbar.left-layout, .toolbar.right-layout {
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: center;
+      position: absolute;
+      left: 0;
+      right: auto;
+      top: 50%;
+      bottom: auto;
+      width: auto;
+      min-width: 3.2em;
+      max-width: 10em;
+      height: auto;
+      background: rgba(255,255,255,0.92);
+      box-shadow: 2px 0 18px 0 #2b69ff22;
+      border-radius: 1.5em;
+      z-index: 100;
+      padding: 0.7em 0.5em;
+      margin: 0;
+      transition: left 0.3s, right 0.3s, width 0.3s, top 0.3s, transform 0.3s;
+      gap: 0.3em;
+      transform: translateY(-50%);
+    }
+    body.night .toolbar.left-layout, body.night .toolbar.right-layout {
+      background: rgba(34,37,64,0.97);
+      box-shadow: 2px 0 18px 0 #1e223055;
+      border-color: #222a39;
+    }
+    body.night .toolbar.right-layout {
+      box-shadow: -2px 0 18px 0 #1e223055;
+    }
+    .toolbar.right-layout {
+      left: auto;
+      right: 0;
+      box-shadow: -2px 0 18px 0 #2b69ff22;
+    }
+    .toolbar.left-layout {
+      left: 0;
+      top: 50%;
+      margin-left: 0;
+      transform: translateY(-50%);
+      position: fixed;
+    }
+    .toolbar.right-layout {
+      right: 0;
+      top: 50%;
+      margin-right: 0;
+      transform: translateY(-50%);
+      position: fixed;
+    }
+    .toolbar.left-layout::-webkit-scrollbar, .toolbar.right-layout::-webkit-scrollbar {
+      display: none;
+    }
+    .curved-textbox-container {
+      margin-left: 0;
+      margin-right: 0;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .toolbar.left-layout ~ .curved-textbox-container,
+    .toolbar.right-layout ~ .curved-textbox-container {
+      padding-left: 7em;
+      padding-right: 0;
+    }
+    .toolbar.right-layout ~ .curved-textbox-container {
+      padding-left: 0;
+      padding-right: 7em;
+    }
+    @media (max-width: 900px) {
+      .curved-textbox-container,
+      .toolbar.left-layout ~ .curved-textbox-container,
+      .toolbar.right-layout ~ .curved-textbox-container {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+    @media (max-width: 700px) {
+      .toolbar.floating-layout,
+      .toolbar.left-layout,
+      .toolbar.right-layout {
+        position: static !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        top: auto !important;
+        transform: none !important;
+        width: 100%;
+        max-width: 100%;
+        padding: 0.5em 0.3em;
+        flex-wrap: wrap;
+        box-sizing: border-box;
+        margin-top: 1em;
+        height: auto;
+      }
+    }
     .curved-textbox.clear-anim {
       animation: clearOut 0.37s cubic-bezier(.56,-0.13,.34,1.4) 1;
     }
@@ -804,7 +882,10 @@ body.night .toolbar.floating-layout {
       .modal-bg.open {
         display: block;
         position: fixed;
-        left: 0; top: 0; right: 0; bottom: 0;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
         width: 100vw;
         height: 100vh;
         z-index: 10000;
@@ -822,6 +903,9 @@ body.night .toolbar.floating-layout {
         padding: 0.7em 0.5em 0.2em 0.5em;
       }
     }
+    .toolbar.left-layout .btn span, .toolbar.right-layout .btn span {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
@@ -836,24 +920,26 @@ body.night .toolbar.floating-layout {
       <div class="text-info" id="countInfo">Characters: 0 | Words: 0</div>
       <div class="toolbar" role="toolbar" aria-label="Text quick actions">
         <button class="btn" id="copyBtn" aria-label="Copy text to clipboard or slide to paste" title="Copy to Clipboard or Slide to Paste">
-          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> <span>Copy</span>
         </button>
         <button class="btn" id="cloudSyncBtn" aria-label="Sync text to cloud" title="Sync text to cloud">
-          ☁️ Sync
+          ☁️ <span>Sync</span>
         </button>
         <button class="btn" id="undoBtn" aria-label="Undo last change" title="Undo">
-          <svg viewBox="0 0 24 24"><path d="M7 7v6h6"/><path d="M3 13a9 9 0 1 0 9-9"/></svg> Undo
+          <svg viewBox="0 0 24 24"><path d="M7 7v6h6"/><path d="M3 13a9 9 0 1 0 9-9"/></svg> <span>Undo</span>
         </button>
         <button class="btn" id="redoBtn" aria-label="Redo last undone change" title="Redo">
-          <svg viewBox="0 0 24 24"><path d="M17 17v-6h-6"/><path d="M21 11a9 9 0 1 1-9 9"/></svg> Redo
+          <svg viewBox="0 0 24 24"><path d="M17 7v6h-6"/><path d="M21 13a9 9 0 1 1-9-9"/></svg> <span>Redo</span>
         </button>
         <button class="btn" id="clearBtn" aria-label="Clear textbox" title="Clear Textbox">
-          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Clear
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> <span>Clear</span>
         </button>
         <button class="btn" id="toggleCountBtn" aria-pressed="true" aria-label="Toggle live word and character count" title="Toggle Word and Character Count">
-          👁️ Count
+          👁️ <span>Count</span>
         </button>
-        <button class="btn" id="toggleThemeBtn" aria-label="Toggle Day/Night Mode" title="Toggle Day/Night Mode">🌙/☀️</button>
+        <button class="btn" id="toggleThemeBtn" aria-label="Toggle Day/Night Mode" title="Toggle Day/Night Mode">
+          🌙/☀️ <span>Theme</span><span class="theme-label"> Night</span>
+        </button>
       </div>
     </div>
   </div>
@@ -957,6 +1043,9 @@ body.night .toolbar.floating-layout {
           <option value="bottom">Bottom (default)</option>
           <option value="top">Top</option>
           <option value="floating">Floating</option>
+          <option value="left" class="desktop-only">Left</option>
+          <option value="right" class="desktop-only">Right</option>
+          <option value="hidden">Hidden</option>
         </select>
       </div>
       <button type="button" class="reset-btn" id="resetSettings">Reset to Default</button>
@@ -988,23 +1077,32 @@ body.night .toolbar.floating-layout {
     let bgMoveType = getPersist('bgMoveType','none');
     let toolbarLayout = getPersist('toolbarLayout', 'bottom');
     function applyToolbarLayout() {
-  const toolbar = document.querySelector('.toolbar');
-  if (!toolbar) return;
-  toolbar.classList.remove('top-layout', 'bottom-layout', 'floating-layout');
-  const container = document.querySelector('.curved-textbox-container');
-  if (toolbarLayout === 'top') {
-    toolbar.classList.add('top-layout');
-    if (container.firstChild !== toolbar) {
-      container.insertBefore(toolbar, container.firstChild);
+      const toolbar = document.querySelector('.toolbar');
+      if (!toolbar) return;
+      toolbar.classList.remove('top-layout', 'bottom-layout', 'floating-layout', 'left-layout', 'right-layout', 'hidden-layout');
+      const container = document.querySelector('.curved-textbox-container');
+      if (toolbarLayout === 'top') {
+        toolbar.classList.add('top-layout');
+        if (container.firstChild !== toolbar) {
+          container.insertBefore(toolbar, container.firstChild);
+        }
+      } else if (toolbarLayout === 'floating') {
+        toolbar.classList.add('floating-layout');
+        container.appendChild(toolbar);
+      } else if (toolbarLayout === 'left') {
+        toolbar.classList.add('left-layout');
+        container.appendChild(toolbar);
+      } else if (toolbarLayout === 'right') {
+        toolbar.classList.add('right-layout');
+        container.appendChild(toolbar);
+      } else if (toolbarLayout === 'hidden') {
+        toolbar.classList.add('hidden-layout');
+        container.appendChild(toolbar);
+      } else {
+        toolbar.classList.add('bottom-layout');
+        container.appendChild(toolbar);
+      }
     }
-  } else if (toolbarLayout === 'floating') {
-    toolbar.classList.add('floating-layout');
-    container.appendChild(toolbar);
-  } else {
-    toolbar.classList.add('bottom-layout');
-    container.appendChild(toolbar);
-  }
-}
     function persistLastSetting(id) { persist('lastSetting', id); }
     function scrollToLastSetting() {
       let lastSetting = localStorage.getItem('lastSetting');
@@ -1085,7 +1183,13 @@ function applyTheme(night){
   updateInfo();
   // Update theme button icon
   const themeBtn = document.getElementById('toggleThemeBtn');
-  if (themeBtn) themeBtn.textContent = isNight ? '☀️ Day' : '🌙 Night';
+  if (themeBtn) {
+    if (toolbarLayout === 'left' || toolbarLayout === 'right') {
+      themeBtn.innerHTML = isNight ? '☀️' : '🌙';
+    } else {
+      themeBtn.innerHTML = isNight ? '☀️ <span>Theme</span><span class="theme-label"> Day</span>' : '🌙 <span>Theme</span><span class="theme-label"> Night</span>';
+    }
+  }
   setFavicon(isNight);
 }
 
@@ -1156,6 +1260,13 @@ function applyTheme(night){
 window.addEventListener('DOMContentLoaded', function() {
   applyToolbarLayout();
   setFavicon(isNight);
+  applyMovingBackground(bgMoveType);
+});
+document.getElementById('bgMoveType').addEventListener('change', function() {
+  bgMoveType = this.value;
+  persist('bgMoveType', bgMoveType);
+  applyMovingBackground(bgMoveType);
+  persistLastSetting('sec-bgMove');
 });
 window.addEventListener('keydown',function(e){
   if(e.key==='Tab' && e.shiftKey && !e.ctrlKey && !e.altKey){
@@ -1398,6 +1509,25 @@ window.onload=()=>{
   }
   setFavicon(isNight);
 }
+    function updateToolbarLayoutOptions() {
+  const isMobile = window.innerWidth <= 700;
+  const toolbarLayoutSelect = document.getElementById('toolbarLayout');
+  if (!toolbarLayoutSelect) return;
+  for (const opt of toolbarLayoutSelect.options) {
+    if (opt.classList.contains('desktop-only')) {
+      opt.style.display = isMobile ? 'none' : '';
+    }
+  }
+  // If currently selected is left/right and on mobile, switch to bottom
+  if (isMobile && (toolbarLayout === 'left' || toolbarLayout === 'right')) {
+    toolbarLayout = 'bottom';
+    toolbarLayoutSelect.value = 'bottom';
+    persist('toolbarLayout', 'bottom');
+    applyToolbarLayout();
+  }
+}
+window.addEventListener('resize', updateToolbarLayoutOptions);
+window.addEventListener('DOMContentLoaded', updateToolbarLayoutOptions);
   </script>
 </body>
 </html>
