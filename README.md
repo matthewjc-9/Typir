@@ -1,10 +1,10 @@
 # Typir - What Logo
 
-Typir is a web-based project that challenges users to identify logos. Built entirely with HTML, this project provides a simple and engaging way to test your knowledge of popular logos.
+Typir is a web-based project that lets the disabled talk to with writing personally. Everybody is unique maybe in differnent ways than us but we are people and people work together, join us and make the world equal as you.
 
 ## Features
 
-- Interactive logo identification game
+- Enter to clear
 - Clean and user-friendly interface
 - 100% HTML for easy customization and deployment
 
@@ -20,7 +20,7 @@ Typir is a web-based project that challenges users to identify logos. Built enti
 
 ## Contributing
 
-Contributions are welcome! If you’d like to add more logos or improve the game, feel free to open an issue or submit a pull request.
+Contributions are welcome! If you’d like to add more features or fix bugs, feel free to open an issue or submit a pull request.
 
 ---
 
